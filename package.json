@@ -6,7 +6,9 @@
   "dependencies": {
     "cypress": "^3.6.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
