@@ -1,15 +1,14 @@
 // TODOS:
-// Test 1. Direct flight, happy flow first iteration
 // beforeEach
 // refactor
+// move out test data
 // Add a document (?)
 // Test 2
 // Test 3
 // Prettier
 
 describe('Claim Form test suite', () => {
-    it('Direct flight, happy flow', () => {
-        cy.visit('');
+    it('Direct flight claim, happy flow', () => {
         // 1 step. Flight itinerary
         cy.contains('#airport-departure', 'Enter the city').click();
         cy.get('.is-focused').type('vno');
@@ -36,9 +35,25 @@ describe('Claim Form test suite', () => {
         cy.get('#flight-1-number').type('1234');
         cy.contains('button', 'Continue').click();
         // 5 step. Documents
+        cy.get('#reservation-number').type('123456');
         cy.contains('button', 'Continue').click();
         // 6 step. Passenger information
-        cy.contains('Good news!').should('be.visible'); // Decided to end here, not to submit to prod db
+        cy.get('#user-name').type('John');
+        cy.get('#user-surname').type('Doe');
+        cy.get('#user-birthdate').click();
+        cy.contains('1990').click();
+        cy.contains('Jan').click();
+        cy.contains('1').click();
+        cy.get('#user-email').type('john.doe@test.com');
+        cy.get('#user-email-repeat').type('john.doe@test.com');
+        cy.get('#address').type('Fake st. 99');
+        cy.get('#city').type('Fakeville');
+        cy.contains('Enter your country').type('lit');
+        cy.get('.Select-option').first().click();
+        cy.get('#userphone').type('12345');
+        cy.get('[name="terms-conditions"]').click();
+        cy.contains('Submit claim').should('be.enabled');
+        // Decided to end here, not to submit to prod db
         // 7 step. Signature
         // 8 step. Finish!
     })
