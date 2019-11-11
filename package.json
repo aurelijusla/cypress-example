@@ -1,0 +1,15 @@
+{
+  "name": "skycop-qa-engineer-task",
+  "version": "1.0.0",
+  "description": "Skycop application task for QA engineer position.",
+  "main": "index.js",
+  "dependencies": {
+    "cypress": "^3.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aurelijus Lasys",
+  "license": "ISC"
+}
