@@ -1,6 +1,7 @@
 {
-    "baseUrl": "https://claim.skycop.com/",
-    "defaultCommandTimeout": 8000,
-    "viewportWidth": 1280,
-    "viewportHeight": 768
+  "baseUrl": "https://claim.skycop.com/",
+  "defaultCommandTimeout": 8000,
+  "viewportWidth": 1280,
+  "viewportHeight": 768,
+  "waitForAnimations": true
 }

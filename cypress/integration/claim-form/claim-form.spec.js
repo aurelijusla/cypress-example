@@ -1,69 +1,80 @@
+import ClaimForm from "../../support/page-objects/claim-form.po";
+
 // TODOS:
-// beforeEach
 // refactor
+// Add ts check
 // move out test data
 // Add a document (?)
 // Test 2
 // Test 3
 // Prettier
 
-describe('Claim Form test suite', () => {
-    it('Direct flight claim, happy flow', () => {
-        // 1 step. Flight itinerary
-        cy.contains('#airport-departure', 'Enter the city').click();
-        cy.get('.is-focused').type('vno');
-        cy.get('.Select-option').first().click();
-        cy.contains('#airport-arrival', 'Enter the city').click();
-        cy.get('.is-focused').type('arn');
-        cy.get('.Select-option').first().click();
-        // 2 step. Disruption details
-        cy.contains('button', 'Continue').click();
-        cy.contains('Flight cancelled').click();
-        cy.contains('Never arrived').click();
-        cy.contains('Less than 14 days').click();
-        cy.contains('button', 'Continue').click();
-        // 3 step. Disruption reason
-        cy.contains('Yes').click();
-        cy.contains('Other reasons').click();
-        cy.get('textarea').type('This is an automated test.');
-        cy.contains('button', 'Continue').click();
-        // 4 step. Flight details
-        cy.contains('Enter airlines name').type('sk');
-        cy.get('.Select-option').first().click();
-        cy.get('#flight-1-date').click();
-        cy.get('.rdtToday').click();
-        cy.get('#flight-1-number').type('1234');
-        cy.contains('button', 'Continue').click();
-        // 5 step. Documents
-        cy.get('#reservation-number').type('123456');
-        cy.contains('button', 'Continue').click();
-        // 6 step. Passenger information
-        cy.get('#user-name').type('John');
-        cy.get('#user-surname').type('Doe');
-        cy.get('#user-birthdate').click();
-        cy.contains('1990').click();
-        cy.contains('Jan').click();
-        cy.contains('1').click();
-        cy.get('#user-email').type('john.doe@test.com');
-        cy.get('#user-email-repeat').type('john.doe@test.com');
-        cy.get('#address').type('Fake st. 99');
-        cy.get('#city').type('Fakeville');
-        cy.contains('Enter your country').type('lit');
-        cy.get('.Select-option').first().click();
-        cy.get('#userphone').type('12345');
-        cy.get('[name="terms-conditions"]').click();
-        cy.contains('Submit claim').should('be.enabled');
-        // Decided to end here, not to submit to prod db
-        // 7 step. Signature
-        // 8 step. Finish!
-    })
-})
+describe("direct flight claim, happy flow", () => {
+  let claimForm = new ClaimForm();
 
-    // describe('Full claim direct flight, happy flow', () => {
-    //     Placeholder
-    // })
+  it('should complete "Flight itinerary" step', () => {
+    claimForm.selectAirport("departure", "vno");
+    claimForm.selectAirport("arrival", "arn");
+    claimForm.clickContinue();
+    claimForm.isDisruptionDetailsShown().should("be.visible");
+  });
 
-    // describe('Full claim, flight not eligible for compensation', () => {
-    //     Placeholder
-    //       })
-    // })
+  it('should complete "Disruption details" step', () => {
+    claimForm.clickRadioButton("Flight cancelled");
+    claimForm.clickRadioButton("Never arrived");
+    claimForm.clickRadioButton("Less than 14 days");
+    claimForm.clickContinue();
+    claimForm.isDisruptionReasonShown().should("be.visible");
+  });
+
+  it('should complete "Disruption reason" step', () => {
+    claimForm.clickRadioButton("Other reasons");
+    claimForm.typeInTextArea("This is an automated test.");
+    claimForm.clickContinue();
+    claimForm.isFlightDetailsShown().should("be.visible"); // Fix
+  });
+
+  it('should complete "Flight details" step', () => {
+    claimForm.selectAirlines("sk");
+    claimForm.selectToday();
+    claimForm.insertFlightNumber("1234");
+    claimForm.clickContinue();
+    claimForm.isDocumentsShown().should("be.visible");
+  });
+
+  it('should complete "Documents" step', () => {
+    // claimForm.insertReservationNumber('123456');
+    // add uploading a file
+    cy.contains("Continue").click({ force: true });
+    claimForm.isPassengerInformationShown().should("be.visible");
+  });
+
+  it('should complete "Passenger information" step', () => {
+    claimForm.insertUserData("name", "John");
+    claimForm.insertUserData("surname", "Doe");
+    claimForm.selectBirthdayDate("1990", "Jan", "1");
+    claimForm.insertUserData("email", "john.doe@test.com");
+    claimForm.insertMiscData("address", "Fake st. 99");
+    claimForm.insertMiscData("city", "Fakeville");
+    claimForm.selectCountry("lit");
+    claimForm.insertMiscData("userphone", "12345");
+    claimForm.clickTermsAndConditions();
+    cy.contains("Submit claim").should("be.enabled"); // Temp until finish
+  });
+
+  // it('should complete "Signature" step', () => {
+
+  // })
+
+  // 7 step. Signature
+  // 8 step. Finish!
+});
+
+// describe('Full claim direct flight, happy flow', () => {
+//     Placeholder
+// })
+
+// describe('Full claim, flight not eligible for compensation', () => {
+//     Placeholder
+//       })
+// })
