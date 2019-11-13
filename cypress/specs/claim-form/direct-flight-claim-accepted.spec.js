@@ -73,7 +73,7 @@ Should be on 'https://claim.skycop.com/'.
 
 /////////////////////////////////////////////////////////////////////
     Step 1
-'Flight itinerary'.
+'Flight itinerary'
 
     Step 1.1
 In 'Departed from' select a non-EU airport such as 'LAX'.
