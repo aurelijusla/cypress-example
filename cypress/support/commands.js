@@ -25,5 +25,5 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 before(() => {
-    cy.visit('');
-})
+  cy.visit("");
+});
