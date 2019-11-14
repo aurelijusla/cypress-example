@@ -8,4 +8,4 @@ Skycop QA engineer application task.
 3. Open the project root folder **skycop-qa-engineer-task** in any code editor (*e. g. Visual Studio Code*).
 4. In terminal run `npm install` to automatically install any other project dependencies.
 5. Now you should be ready to run the tests! Run `npm run cypress:open` and wait until Cypress spec GUI is loaded.
-6. Click *Run all specs* in top right corner.
+6. Click **Run all specs** in top right corner.
