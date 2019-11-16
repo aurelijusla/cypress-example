@@ -4,5 +4,8 @@
   "viewportHeight": 768,
   "defaultCommandTimeout": 8000,
   "waitForAnimations": true,
-  "integrationFolder": "cypress/specs"
+  "integrationFolder": "cypress/specs",
+  "fixturesFolder": "disable",
+  "pluginsFolder": "cypress/plugin",
+  "supportFile": "cypress/support"
 }

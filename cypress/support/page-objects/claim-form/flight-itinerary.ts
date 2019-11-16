@@ -1,7 +1,7 @@
-import ClaimFormPage from "./claim-form.po";
+import { ClaimFormPage } from "./page";
 
-export default class FlightItineraryPage extends ClaimFormPage {
-  selectAirport(direction, airport) {
+export class FlightItineraryPage extends ClaimFormPage {
+  selectAirport(direction: string, airport: string) {
     switch (direction) {
       case "departure":
         cy.contains("#airport-departure", "Enter the city").click();

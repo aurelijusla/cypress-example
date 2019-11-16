@@ -1,11 +1,11 @@
-import ClaimFormPage from "./claim-form.po";
+import { ClaimFormPage } from "./page";
 
-export default class FlightDetailsPage extends ClaimFormPage {
-  flightDetails() {
+export class FlightDetailsPage extends ClaimFormPage {
+  get flightDetails() {
     return cy.contains("#page-view-title", "Flight details");
   }
 
-  selectAirlines(airlines) {
+  selectAirlines(airlines: string) {
     cy.contains("Enter airlines name").type(airlines);
     return cy
       .get(".Select-option")
@@ -13,12 +13,12 @@ export default class FlightDetailsPage extends ClaimFormPage {
       .click();
   }
 
-  selectToday(fieldId) {
+  selectToday(fieldId: string) {
     cy.get(`#flight-${fieldId}-date`).click();
     return cy.get(".rdtToday:visible").click();
   }
 
-  insertFlightNumber(fieldId, flightNumber) {
+  insertFlightNumber(fieldId: string, flightNumber: string) {
     return cy
       .get(`#flight-${fieldId}-number`)
       .eq(0)

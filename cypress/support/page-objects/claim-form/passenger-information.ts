@@ -1,7 +1,7 @@
-import ClaimFormPage from "./claim-form.po";
+import { ClaimFormPage } from "./page";
 
-export default class PassengerInformationPage extends ClaimFormPage {
-  passengerInformation() {
+export class PassengerInformationPage extends ClaimFormPage {
+  get passengerInformation() {
     return cy.contains("#page-view-title", "Basic information");
   }
 
@@ -9,22 +9,22 @@ export default class PassengerInformationPage extends ClaimFormPage {
     return cy.get('[name="terms-conditions"]').click();
   }
 
-  insertUserData(parameter, value) {
+  insertUserData(parameter: string, value: string) {
     return cy.get(`#user-${parameter}`).type(value);
   }
 
-  insertMiscData(parameter, value) {
+  insertMiscData(parameter: string, value: string) {
     return cy.get(`#${parameter}`).type(value);
   }
 
-  selectBirthdayDate(year, month, day) {
+  selectBirthdayDate(year: string, month: string, day: string) {
     cy.get("#user-birthdate").click();
     cy.contains(year).click();
     cy.contains(month).click();
     return cy.contains(day).click();
   }
 
-  selectCountry(country) {
+  selectCountry(country: string) {
     cy.contains("Enter your country").type(country);
     return cy
       .get(".Select-option")
@@ -32,7 +32,7 @@ export default class PassengerInformationPage extends ClaimFormPage {
       .click();
   }
 
-  submitButton() {
+  get submitButton() {
     return cy.contains("Submit claim");
   }
 }

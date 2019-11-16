@@ -4,10 +4,15 @@
   "description": "Skycop application task for QA engineer position.",
   "main": "index.js",
   "dependencies": {
+    "@types/mocha": "^5.2.7",
     "cypress": "^3.6.1"
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
+    "prettier": "^1.19.1",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2"
   },
   "scripts": {
     "cypress:open": "cypress open",

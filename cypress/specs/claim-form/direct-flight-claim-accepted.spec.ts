@@ -1,11 +1,20 @@
-import FlightItineraryPage from "../../support/page-objects/claim-form/flight-itinerary.po";
-import DisruptionDetailsPage from "../../support/page-objects/claim-form/disruption-details.po";
-import DisruptionReasonPage from "../../support/page-objects/claim-form/disruption-reason.po";
-import FlightDetailsPage from "../../support/page-objects/claim-form/flight-details.po";
-import DocumentsPage from "../../support/page-objects/claim-form/documents.po";
-import PassengerInformationPage from "../../support/page-objects/claim-form/passenger-information.po";
+import {
+  TestData,
+  FlightItineraryPage,
+  DisruptionDetailsPage,
+  DisruptionReasonPage,
+  FlightDetailsPage,
+  DocumentsPage,
+  PassengerInformationPage,
+} from "../../support";
 
 describe("direct flight claim accepted", () => {
+  before(() => {
+    cy.visit("");
+  });
+
+  let testData = new TestData();
+
   let flightItineraryPage = new FlightItineraryPage();
   let disruptionDetailsPage = new DisruptionDetailsPage();
   let disruptionReasonPage = new DisruptionReasonPage();
@@ -14,10 +23,16 @@ describe("direct flight claim accepted", () => {
   let passengerInformationPage = new PassengerInformationPage();
 
   it('should complete "Flight itinerary" step', () => {
-    flightItineraryPage.selectAirport("departure", "vno");
-    flightItineraryPage.selectAirport("arrival", "arn");
+    flightItineraryPage.selectAirport(
+      "departure",
+      testData.airports.euAirports[0].abbreviation
+    );
+    flightItineraryPage.selectAirport(
+      "arrival",
+      testData.airports.euAirports[1].abbreviation
+    );
     flightItineraryPage.clickContinue();
-    disruptionDetailsPage.disruptionDetails().should("be.visible");
+    disruptionDetailsPage.disruptionDetails.should("be.visible");
   });
 
   it('should complete "Disruption details" step', () => {
@@ -25,41 +40,49 @@ describe("direct flight claim accepted", () => {
     disruptionDetailsPage.clickRadioButton("Never arrived");
     disruptionDetailsPage.clickRadioButton("Less than 14 days");
     disruptionDetailsPage.clickContinue();
-    disruptionReasonPage.disruptionReason().should("be.visible");
+    disruptionReasonPage.disruptionReason.should("be.visible");
   });
 
   it('should complete "Disruption reason" step', () => {
     disruptionReasonPage.clickRadioButton("Other reasons");
-    disruptionReasonPage.typeInTextArea("This is an automated test.");
+    disruptionReasonPage.typeInTextArea(testData.testText);
     disruptionReasonPage.clickContinue();
-    flightDetailsPage.flightDetails().should("be.visible"); // Fix
+    flightDetailsPage.flightDetails.should("be.visible"); // Fix
   });
 
   it('should complete "Flight details" step', () => {
-    flightDetailsPage.selectAirlines("sk");
+    flightDetailsPage.selectAirlines(testData.airlines);
     flightDetailsPage.selectToday("1");
-    flightDetailsPage.insertFlightNumber("1", "1234");
+    flightDetailsPage.insertFlightNumber("1", testData.flightNumbers[0]);
     flightDetailsPage.clickContinue();
-    documentsPage.documents().should("be.visible");
+    documentsPage.documents.should("be.visible");
   });
 
   it('should complete "Documents" step', () => {
     // add uploading a file
     documentsPage.clickContinue(); // Bug: Element not visible.
-    passengerInformationPage.passengerInformation().should("be.visible");
+    passengerInformationPage.passengerInformation.should("be.visible");
   });
 
   it('should complete "Passenger information" step', () => {
-    passengerInformationPage.insertUserData("name", "John");
-    passengerInformationPage.insertUserData("surname", "Doe");
-    passengerInformationPage.selectBirthdayDate("1990", "Jan", "1");
-    passengerInformationPage.insertUserData("email", "john.doe@test.com");
-    passengerInformationPage.insertMiscData("address", "Fake st. 99");
-    passengerInformationPage.insertMiscData("city", "Fakeville");
-    passengerInformationPage.selectCountry("lit");
-    passengerInformationPage.insertUserData("phone", "12345");
+    passengerInformationPage.insertUserData("name", testData.user.name);
+    passengerInformationPage.insertUserData("surname", testData.user.surname);
+    passengerInformationPage.selectBirthdayDate(
+      testData.user.birthYear,
+      testData.user.birthMonth,
+      testData.user.birthDay
+    );
+    passengerInformationPage.insertUserData("email", testData.user.email);
+    passengerInformationPage.insertUserData(
+      "email-repeat",
+      testData.user.email
+    );
+    passengerInformationPage.insertMiscData("address", testData.user.address);
+    passengerInformationPage.insertMiscData("city", testData.user.city);
+    passengerInformationPage.selectCountry(testData.user.country);
+    passengerInformationPage.insertUserData("phone", testData.user.phone);
     passengerInformationPage.clickTermsAndConditions();
-    passengerInformationPage.submitButton().should("be.enabled");
+    passengerInformationPage.submitButton.should("be.enabled");
     // Note: Decided to end here due to lack of time.
   });
 });
@@ -76,9 +99,9 @@ Should be on 'https://claim.skycop.com/'.
 'Flight itinerary'
 
     Step 1.1
-In 'Departed from' select a non-EU airport such as 'LAX'.
+In 'Departed from' select an EU airport such as 'VNO'.
     Step 1.2
-In 'Final destination airport' select a non-EU airport such as 'GFF'.
+In 'Final destination airport' select an EU airport such as 'ARN'.
     Step 1.3
 In 'Was it a direct flight' select 'Yes'.
     Step 1.4

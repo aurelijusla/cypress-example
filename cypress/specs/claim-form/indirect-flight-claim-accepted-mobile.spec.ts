@@ -1,11 +1,16 @@
-import FlightItineraryPage from "../../support/page-objects/claim-form/flight-itinerary.po";
-import DisruptionDetailsPage from "../../support/page-objects/claim-form/disruption-details.po";
-import DisruptionReasonPage from "../../support/page-objects/claim-form/disruption-reason.po";
-import FlightDetailsPage from "../../support/page-objects/claim-form/flight-details.po";
-import DocumentsPage from "../../support/page-objects/claim-form/documents.po";
-import PassengerInformationPage from "../../support/page-objects/claim-form/passenger-information.po";
+import {
+  TestData,
+  FlightItineraryPage,
+  DisruptionDetailsPage,
+  DisruptionReasonPage,
+  FlightDetailsPage,
+  DocumentsPage,
+  PassengerInformationPage,
+} from "../../support";
 
 describe("indirect flight claim accepted using iphone 6 (viewport 375px x 667px)", () => {
+  let testData = new TestData();
+
   let flightItineraryPage = new FlightItineraryPage();
   let disruptionDetailsPage = new DisruptionDetailsPage();
   let disruptionReasonPage = new DisruptionReasonPage();
@@ -13,63 +18,80 @@ describe("indirect flight claim accepted using iphone 6 (viewport 375px x 667px)
   let documentsPage = new DocumentsPage();
   let passengerInformationPage = new PassengerInformationPage();
 
-  beforeEach(() => {
+  before(() => {
+    cy.visit("");
     cy.viewport("iphone-6");
   });
 
   it('should complete "Flight itinerary" step', () => {
-    flightItineraryPage.selectAirport("departure", "vno");
-    flightItineraryPage.selectAirport("arrival", "arn");
+    flightItineraryPage.selectAirport(
+      "departure",
+      testData.airports.euAirports[0].abbreviation
+    );
+    flightItineraryPage.selectAirport(
+      "arrival",
+      testData.airports.euAirports[1].abbreviation
+    );
     flightItineraryPage.selectIndirectFlight();
-    flightItineraryPage.selectAirport("stop-1", "rix");
+    flightItineraryPage.selectAirport(
+      "stop-1",
+      testData.airports.euAirports[2].abbreviation
+    );
     flightItineraryPage.clickContinue();
-    disruptionDetailsPage.disruptionDetails().should("be.visible");
+    disruptionDetailsPage.disruptionDetails.should("be.visible");
   });
 
   it('should complete "Disruption details" step', () => {
     disruptionDetailsPage.clickRadioButton("Flight delayed");
     disruptionDetailsPage.clickRadioButton("Missed connecting flight");
     disruptionDetailsPage.clickContinue();
-    disruptionReasonPage.disruptionReason().should("be.visible");
+    disruptionReasonPage.disruptionReason.should("be.visible");
   });
 
   it('should complete "Disruption reason" step', () => {
     disruptionReasonPage.clickRadioButton("Aircraft technical problem");
-    disruptionReasonPage.typeInTextArea("This is an automated test.");
+    disruptionReasonPage.typeInTextArea(testData.testText);
     disruptionReasonPage.clickContinue();
-    flightDetailsPage.flightDetails().should("be.visible"); // Fix
+    flightDetailsPage.flightDetails.should("be.visible"); // Fix
   });
 
   it('should complete "Flight details" step', () => {
-    flightDetailsPage.selectAirlines("sk");
+    flightDetailsPage.selectAirlines(testData.airlines);
     flightDetailsPage.selectToday("1");
-    flightDetailsPage.insertFlightNumber("1", "1234");
-    flightDetailsPage.selectAirlines("sk");
+    flightDetailsPage.insertFlightNumber("1", testData.flightNumbers[0]);
+    flightDetailsPage.selectAirlines(testData.airlines);
     flightDetailsPage.selectToday("2");
-    flightDetailsPage.insertFlightNumber("2", "5678");
+    flightDetailsPage.insertFlightNumber("2", testData.flightNumbers[1]);
     flightDetailsPage.clickContinue();
-    documentsPage.documents().should("be.visible");
+    documentsPage.documents.should("be.visible");
   });
 
   it('should complete "Documents" step', () => {
-    documentsPage.insertReservationNumber("123456");
+    documentsPage.insertReservationNumber(testData.reservationNumber);
     // Note: Could add uploading a file
     documentsPage.clickContinue();
-    passengerInformationPage.isPassengerInformationShown().should("be.visible");
+    passengerInformationPage.passengerInformation.should("be.visible");
   });
 
   it('should complete "Passenger information" step', () => {
-    passengerInformationPage.insertUserData("name", "John");
-    passengerInformationPage.insertUserData("surname", "Doe");
-    passengerInformationPage.selectBirthdayDate("1990", "Jan", "1");
-    passengerInformationPage.insertUserData("email", "john.doe@test.com");
-    passengerInformationPage.insertMiscData("address", "Fake st. 99");
-    passengerInformationPage.insertMiscData("city", "Fakeville");
-    passengerInformationPage.selectCountry("lit");
-    passengerInformationPage.insertUserData("phone", "12345");
+    passengerInformationPage.insertUserData("name", testData.user.name);
+    passengerInformationPage.insertUserData("surname", testData.user.surname);
+    passengerInformationPage.selectBirthdayDate(
+      testData.user.birthYear,
+      testData.user.birthMonth,
+      testData.user.birthDay
+    );
+    passengerInformationPage.insertUserData("email", testData.user.email);
+    passengerInformationPage.insertUserData(
+      "email-repeat",
+      testData.user.email
+    );
+    passengerInformationPage.insertMiscData("address", testData.user.address);
+    passengerInformationPage.insertMiscData("city", testData.user.city);
+    passengerInformationPage.selectCountry(testData.user.country);
+    passengerInformationPage.insertUserData("phone", testData.user.phone);
     passengerInformationPage.clickTermsAndConditions();
-    passengerInformationPage.clickTermsAndConditions();
-    passengerInformationPage.submitButton().should("be.enabled");
+    passengerInformationPage.submitButton.should("be.enabled");
     // Note: Decided to end here due to lack of time.
   });
 });
