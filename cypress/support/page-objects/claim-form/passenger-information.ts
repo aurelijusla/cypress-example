@@ -6,22 +6,23 @@ export class PassengerInformationPage extends ClaimFormPage {
   }
 
   clickTermsAndConditions() {
-    return cy.get('[name="terms-conditions"]').click();
+    return cy.get('[name="termsConditions"]').click();
   }
 
   insertUserData(parameter: string, value: string) {
     return cy.get(`#user-${parameter}`).type(value);
   }
 
-  insertMiscData(parameter: string, value: string) {
-    return cy.get(`#${parameter}`).type(value);
-  }
-
-  selectBirthdayDate(year: string, month: string, day: string) {
+  selectBirthdayDate(year: string, month: string) {
     cy.get("#user-birthdate").click();
     cy.contains(year).click();
     cy.contains(month).click();
-    return cy.contains(day).click();
+    cy.wait(1000);
+    return cy
+      .get(
+        "#step-page-content > div.sc-dvCyap.jbjnKp.sc-dnqmqq.iWPryR > div:nth-child(2) > div > form > div:nth-child(3) > div > div > div > div > div > table > tbody > tr:nth-child(1) > td:nth-child(4) > div > div"
+      )
+      .click();
   }
 
   selectCountry(country: string) {

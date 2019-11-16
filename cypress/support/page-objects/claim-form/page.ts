@@ -1,6 +1,7 @@
 export class ClaimFormPage {
   clickContinue() {
-    return cy.contains("button", "Continue").click({ force: true });
+    cy.wait(1000);
+    return cy.contains("Continue").click({ force: true });
     // force: true is because of Documents issue
   }
 

@@ -35,7 +35,7 @@ export class TestData {
     birthYear: "1990",
     birthMonth: "Jan",
     birthDay: "1",
-    email: "test@tst.com",
+    email: "aurelijus.lasys@gmail.com",
     address: "Fake st, 99",
     city: "Fakeville",
     country: "Lithuania",

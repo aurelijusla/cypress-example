@@ -1,5 +1,6 @@
 import {
   TestData,
+  SharedActions,
   FlightItineraryPage,
   DisruptionDetailsPage,
   DisruptionReasonPage,
@@ -9,11 +10,8 @@ import {
 } from "../../support";
 
 describe("direct flight claim accepted", () => {
-  before(() => {
-    cy.visit("");
-  });
-
   let testData = new TestData();
+  let sharedActions = new SharedActions();
 
   let flightItineraryPage = new FlightItineraryPage();
   let disruptionDetailsPage = new DisruptionDetailsPage();
@@ -22,7 +20,12 @@ describe("direct flight claim accepted", () => {
   let documentsPage = new DocumentsPage();
   let passengerInformationPage = new PassengerInformationPage();
 
-  it('should complete "Flight itinerary" step', () => {
+  before(() => {
+    sharedActions.goToClaimPage();
+  });
+
+  it("should be able to submit form if direct claim flow is successful", () => {
+    // Flight itineraray step
     flightItineraryPage.selectAirport(
       "departure",
       testData.airports.euAirports[0].abbreviation
@@ -33,57 +36,51 @@ describe("direct flight claim accepted", () => {
     );
     flightItineraryPage.clickContinue();
     disruptionDetailsPage.disruptionDetails.should("be.visible");
-  });
 
-  it('should complete "Disruption details" step', () => {
+    // Disruption details
     disruptionDetailsPage.clickRadioButton("Flight cancelled");
     disruptionDetailsPage.clickRadioButton("Never arrived");
     disruptionDetailsPage.clickRadioButton("Less than 14 days");
     disruptionDetailsPage.clickContinue();
     disruptionReasonPage.disruptionReason.should("be.visible");
-  });
 
-  it('should complete "Disruption reason" step', () => {
+    // Disruption reason
     disruptionReasonPage.clickRadioButton("Other reasons");
     disruptionReasonPage.typeInTextArea(testData.testText);
     disruptionReasonPage.clickContinue();
     flightDetailsPage.flightDetails.should("be.visible"); // Fix
-  });
 
-  it('should complete "Flight details" step', () => {
+    // Flight details
     flightDetailsPage.selectAirlines(testData.airlines);
     flightDetailsPage.selectToday("1");
     flightDetailsPage.insertFlightNumber("1", testData.flightNumbers[0]);
     flightDetailsPage.clickContinue();
     documentsPage.documents.should("be.visible");
-  });
 
-  it('should complete "Documents" step', () => {
+    // Documents
     // add uploading a file
     documentsPage.clickContinue(); // Bug: Element not visible.
     passengerInformationPage.passengerInformation.should("be.visible");
-  });
 
-  it('should complete "Passenger information" step', () => {
+    // Passenger information
     passengerInformationPage.insertUserData("name", testData.user.name);
     passengerInformationPage.insertUserData("surname", testData.user.surname);
     passengerInformationPage.selectBirthdayDate(
       testData.user.birthYear,
-      testData.user.birthMonth,
-      testData.user.birthDay
+      testData.user.birthMonth
     );
     passengerInformationPage.insertUserData("email", testData.user.email);
     passengerInformationPage.insertUserData(
       "email-repeat",
       testData.user.email
     );
-    passengerInformationPage.insertMiscData("address", testData.user.address);
-    passengerInformationPage.insertMiscData("city", testData.user.city);
+    passengerInformationPage.insertUserData("address", testData.user.address);
+    passengerInformationPage.insertUserData("city", testData.user.city);
     passengerInformationPage.selectCountry(testData.user.country);
     passengerInformationPage.insertUserData("phone", testData.user.phone);
     passengerInformationPage.clickTermsAndConditions();
     passengerInformationPage.submitButton.should("be.enabled");
-    // Note: Decided to end here due to lack of time.
+    // Note: Decided not to actually submit, but check if button is enabled in the end.
   });
 });
 

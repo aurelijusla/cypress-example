@@ -1,13 +1,19 @@
-import { TestData, FlightItineraryPage, ApologyModal } from "../../support";
+import {
+  TestData,
+  SharedActions,
+  FlightItineraryPage,
+  ApologyModal,
+} from "../../support";
 
 describe("direct flight claim is ineligible", () => {
   let testData = new TestData();
+  let sharedActions = new SharedActions();
 
   let flightItineraryPage = new FlightItineraryPage();
   let apologyModal = new ApologyModal();
 
   before(() => {
-    cy.visit("");
+    sharedActions.goToClaimPage();
   });
 
   it("should provide an apology message when flight is ineligible", () => {

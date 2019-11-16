@@ -1,8 +1,8 @@
 {
   "baseUrl": "https://claim.skycop.com/",
   "viewportWidth": 1920,
-  "viewportHeight": 768,
-  "defaultCommandTimeout": 8000,
+  "viewportHeight": 1080,
+  "defaultCommandTimeout": 10000,
   "waitForAnimations": true,
   "integrationFolder": "cypress/specs",
   "fixturesFolder": "disable",

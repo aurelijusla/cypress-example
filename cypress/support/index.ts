@@ -1,5 +1,7 @@
 export { TestData } from "./test-data/test-data";
 
+export { SharedActions } from "./shared/shared";
+
 export { ClaimFormPage } from "./page-objects/claim-form/page";
 
 export { DisruptionDetailsPage } from "./page-objects/claim-form/disruption-details";
