@@ -1,5 +1,5 @@
-# skycop-qa-engineer-task
-Skycop QA engineer application task.
+# cypress-example
+Cypress example task.
 
 ## How to setup the project:
 1. Node.js ([link](https://nodejs.org/en/)) and Git ([link](https://git-scm.com/)) should be installed as a prerequisite to run the test suite.
